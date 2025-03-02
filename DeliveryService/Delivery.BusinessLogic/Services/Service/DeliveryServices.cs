@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Abstractions;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Contracts.Dto;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories;
+using DeliveryService.Delivery.Core.Models.Responses;
 
 namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
 {
@@ -17,36 +18,44 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
         }
 
         /// <summary>
-        /// Создать доставку.
-        /// </summary>
-        /// <param name="createDeliveryDto"> Дто создаваемой доставки. </param>
-        public async Task<Guid> CreateAsync(CreateDeliveryDto createDeliveryDto)
-        {
-            var delivery = _mapper.Map<CreateDeliveryDto, DataAccess.Domain.Domain.Entities.Delivery>(createDeliveryDto);
-            var createdDelivery = await _deliveryRepository.AddAsync(delivery);
-            await _deliveryRepository.SaveChangesAsync();
-            return createdDelivery.Id;
-        }
-
-        /// <summary>
         /// Получить доставку по id.
         /// </summary>
         /// <param name="id"> Идентификатор доставки. </param>
         /// <returns> DTO доставки.</returns>
-        public async Task<DeliveryDto> GetByIdAsync(Guid id)
+        public async Task<Domain.Entities.DeliveryEntities.Delivery> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var delivery = await _deliveryRepository.GetAsync(id, CancellationToken.None);
-            var deliveryDto = _mapper.Map<DeliveryDto>(delivery);
+            var delivery = await _deliveryRepository.GetAsync(id, CancellationToken.None);            
 
-            return deliveryDto;
+            return delivery;
         }
+
+        public async Task<Domain.Entities.DeliveryEntities.Delivery> GetDeliveryByOrderIdAsync(Guid orderId, CancellationToken cancellationToken)
+        {
+            var delivery = await _deliveryRepository.GetAsync(orderId, CancellationToken.None);
+
+            return delivery;
+
+        }
+
+
+        /// <summary>
+        /// Создать доставку.
+        /// </summary>
+        /// <param name="createDeliveryDto"> Дто создаваемой доставки. </param>
+        public async Task<Domain.Entities.DeliveryEntities.Delivery> CreateAsync(CreateDeliveryDto createDeliveryDto, CancellationToken cancellationToken)
+        {
+            var delivery = _mapper.Map<CreateDeliveryDto, Domain.Entities.DeliveryEntities.Delivery>(createDeliveryDto);
+            var createdDelivery = await _deliveryRepository.AddAsync(delivery, cancellationToken);
+            await _deliveryRepository.SaveChangesAsync();
+            return createdDelivery;
+        }        
 
         /// <summary>
         /// Изменить доставку по id.
         /// </summary>
         /// <param name="id"> Иентификатор доставки. </param>
         /// <param name="updateDeliveryDto"> ДТО редактируемого товара. </param>
-        public async Task<bool> TryUpdateAsync(Guid id, updateDeliveryDto updateDeliveryDto)
+        public async Task<bool> UpdateAsync(Guid id, UpdateDeliveryDto updateDeliveryDto, CancellationToken cancellationToken)
         {
             var delivery = await _deliveryRepository.GetAsync(id, CancellationToken.None);
 
@@ -57,24 +66,25 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
 
             delivery.PaymentType = updateDeliveryDto.PaymentType;
             delivery.DeliveryStatus = updateDeliveryDto.DeliveryStatus;
-            delivery.OrderId = updateDeliveryDto.OrderId;
-            delivery.CourierId = updateDeliveryDto.CourierId;
+            delivery.OrderId = updateDeliveryDto.OrderId;            
             delivery.ShippingAddress = updateDeliveryDto.ShippingAddress;
             delivery.TotalQuantity = updateDeliveryDto.TotalQuantity;
             delivery.TotalPrice = updateDeliveryDto.TotalPrice;
             delivery.EstimatedDeliveryTime = updateDeliveryDto.EstimatedDeliveryTime;
 
-            _deliveryRepository.Update(delivery);
+            _ = _deliveryRepository.UpdateAsync(delivery, cancellationToken);
             await _deliveryRepository.SaveChangesAsync();
 
             return true;
         }
 
+
+
         /// <summary>
         /// Удалить доставку.
         /// </summary>
         /// <param name="id"> Идентификатор доставки. </param>
-        public async Task<bool> TryDeleteAsync(Guid id)
+        public async Task<bool> TryDeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var product = await _deliveryRepository.GetAsync(id, CancellationToken.None);
 
@@ -85,7 +95,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
 
             product.IsDeleted = true;
 
-            _deliveryRepository.Update(product);
+            _deliveryRepository.DeleteAsync(product, cancellationToken);
             await _deliveryRepository.SaveChangesAsync();
 
             return true;

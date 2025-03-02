@@ -1,9 +1,9 @@
 using DeliveryService.Delivery.BusinessLogic.Enums;
 using DeliveryService.Delivery.Domain.Entities.DeliveryEntities;
 
-namespace DeliveryService.Delivery.BusinessLogic.Models
+namespace DeliveryService.Delivery.Core.Models.Responses
 {
-    public class CreateDeliveryModel
+    public class CreateDeliveryResponse
     {
         public Guid Id { get; set; }
         public required Guid UserGuid { get; set; }

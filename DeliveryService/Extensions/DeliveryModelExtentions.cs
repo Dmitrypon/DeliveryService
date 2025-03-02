@@ -11,9 +11,10 @@ namespace DeliveryService.Extensions
             return new CreateDeliveryDto
             {
                 Id = dtoEntity.Id,
+                UserGuid = dtoEntity.UserGuid,
                 OrderId = dtoEntity.OrderId,
                 OrderStatus = dtoEntity.OrderStatus,
-                CourierId = dtoEntity.CourierId,
+                CourierId = (Guid)dtoEntity.CourierId,
                 DeliveryStatus = dtoEntity.DeliveryStatus,
                 TotalQuantity = dtoEntity.TotalQuantity,
                 TotalPrice = dtoEntity.TotalPrice,

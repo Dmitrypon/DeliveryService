@@ -1,7 +1,12 @@
-﻿using AutoMapper;
+using System.Text.Json;
+using System.Threading;
+using AutoMapper;
 using DeliveryService.Delivery.BusinessLogic.Models;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Abstractions;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Contracts.Dto;
+using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories;
+using DeliveryService.Delivery.Core.Models.Requests;
+using DeliveryService.Delivery.Core.Models.Responses;
 using DeliveryService.Delivery.DataAccess.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,50 +14,84 @@ namespace DeliveryService.Delivery.Core.Controllers
 {
     [ApiController]
     [Route("api/v3/[controller]")]
-    public class DeliveryController : ControllerBase
-    {
-        private readonly IDeliveryService _deliveryService;
-        private readonly IMapper _mapper;
-        private readonly ILogger<DeliveryController> _logger;
-
-        public DeliveryController(IDeliveryService deliveryService, IMapper mapper, ILogger<DeliveryController> logger)
-        {
-            _deliveryService = deliveryService;
-            _mapper = mapper;
-            _logger = logger;
-        }
-
+    public class DeliveryController(IDeliveryService            _deliveryService,                                      
+                                    IMapper                     _mapper,
+                                    ILogger<DeliveryController> _logger) : ControllerBase 
+    {   
+        /// <summary>
+        /// Получение доставки через Guid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// 
         [HttpGet("/api/delivery/{id}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var deliveryModel = _mapper.Map<DeliveryModel>(await _deliveryService.GetByIdAsync(id));
-            return Ok(_mapper.Map<DeliveryDBContext>(await _deliveryService.GetByIdAsync(id)));
+            var deliveryModel = _mapper.Map<DeliveryDto>(await _deliveryService.GetByIdAsync(id, cancellationToken));
+            return Ok(_mapper.Map<DeliveryDBContext>(await _deliveryService.GetByIdAsync(id, cancellationToken)));
+
+        }
+        /// <summary>
+        /// Создание доставки
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+
+        [HttpPost("/api/create-delivery")]             
+        public async Task<ActionResult<CreateDeliveryResponse>> CreateAsync(CreateDeliveryRequest request, CancellationToken cancellationToken)
+        {            
+            var delivery = await _deliveryService.CreateAsync(_mapper.Map<CreateDeliveryDto>(request), cancellationToken);
+            return Ok(_mapper.Map<CreateDeliveryResponse>(delivery));     
         }
 
-        [HttpPost("/api/create-delivery")]
-        public async Task<IActionResult> CreateAsync(CreateDeliveryModel createDeliveryModel)
-        {
-            //var model = createDeliveryModel.MapModelDelivery();
-            return Ok(await _deliveryService.CreateAsync(_mapper.Map<CreateDeliveryDto>(createDeliveryModel)));
-            //return Ok(await _deliveryService.CreateAsync(model));
-        }
-
+        /// <summary>
+        /// Изменение доставки по Guid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("/api/update-delivery/{id}")]
-        public async Task<IActionResult> TryUpdateAsync(Guid id, UpdateDeliveryModel updateDeliveryModel)
-        {
-            //var updateDeliveryDto = _mapper.Map<updateDeliveryDto>(updateDeliveryDto);
-
-            await _deliveryService.TryUpdateAsync(id, _mapper.Map<UpdateDeliveryModel, updateDeliveryDto>(updateDeliveryModel));
-            //bool isUpdated = await _deliveryService.TryUpdateAsync(id, updateDeliveryModel);
-            //return isUpdated ? Ok() : NotFound($"Доставка с идентфикатором {id} не найдена");
-            return Ok();
+        public async Task<ActionResult<EditDeliveryResponse>> UpdateAsync(Guid id, EditDeliveryRequest request, CancellationToken cancellationToken)
+        { 
+            var delivery = await _deliveryService.UpdateAsync(id, _mapper.Map<EditDeliveryRequest, UpdateDeliveryDto>(request), cancellationToken);            
+            return Ok(_mapper.Map<EditDeliveryResponse>(delivery));
         }
 
+        /// <summary>
+        /// Удаление доставки по Guid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("/api/delete-delivery/{id}")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            bool isDeleted = await _deliveryService.TryDeleteAsync(id);
+            bool isDeleted = await _deliveryService.TryDeleteAsync(id, cancellationToken);
             return isDeleted ? Ok(id) : NotFound();
         }
+
+        /// <summary>
+        /// Получение статуса доставки через Guid
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet("GetDeliveryStatusByOrderId")]
+        public async Task<IActionResult> GetDeliveryStatusByOrderId(Guid orderId, CancellationToken cancellationToken)
+        {
+            var delivery = await _deliveryService.GetDeliveryByOrderIdAsync(orderId, cancellationToken);
+            if (delivery != null)
+                return Ok(JsonSerializer.Serialize(delivery));
+
+            return NotFound();
+        }
+        /// <summary>
+        /// Получение статуса доставки через id заказа 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// 
+        //[HttpGet("/api/getDeliveryStatusByOrderId/{}")]
+        //public async Task<IActionResult> GetDeliveryStatusByOrderId(Guid orderId)
+        //{
+        //    var delivery = await _deliveryRepository.GetDeliveryByOrderIdAsync(orderId);
+        //    if (
     }
 }

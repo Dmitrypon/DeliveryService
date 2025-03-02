@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace DeliveryService.Delivery.DataAccess.Domain.Domain.Entities
+namespace DeliveryService.Delivery.Domain.Entities.DeliveryEntities
 {
     public class Route
     {

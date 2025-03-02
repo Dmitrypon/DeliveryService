@@ -1,4 +1,4 @@
-﻿namespace DeliveryService.Delivery.DataAccess.Domain.Domain.Entities
+namespace DeliveryService.Delivery.Domain.Entities.DeliveryEntities
 {
     /// <summary>
     /// Интерфейс сущности с идентификатором.
@@ -6,9 +6,9 @@
     /// <typeparam name="TId"> Тип идентификатора. </typeparam>
     public interface IEntity<TId>
     {
-      /// <summary>
-      /// Идентификатор.
-      /// </summary>
+        /// <summary>
+        /// Идентификатор.
+        /// </summary>
         TId Id { get; set; }
     }
 }

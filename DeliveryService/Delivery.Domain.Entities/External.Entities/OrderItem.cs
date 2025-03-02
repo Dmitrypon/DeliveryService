@@ -1,6 +1,6 @@
-﻿using DeliveryService.Delivery.DataAccess.Domain.Domain.Entities;
+using DeliveryService.Delivery.Domain.Entities.DeliveryEntities;
 
-namespace DeliveryService.Delivery.DataAccess.Domain.External.Entities
+namespace DeliveryService.Domain.External.Entities
 {
     public class OrderItem : IEntity<Guid>
     {
