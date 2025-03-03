@@ -5,9 +5,9 @@ using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories;
 using Mailchimp.Core;
 using DeliveryService.Domain.External.Entities;
 
-namespace DeliveryService.Kafka.Consumer
+namespace DeliveryService.Kafka.Consumers
 {
-    public class ConsumerService : BackgroundService
+    public class ConsumerService : BackgroundService 
     {
         private readonly IConsumer<Null, string> _kafkaConsumer;
         private readonly IOrderRepository _orderRepository;

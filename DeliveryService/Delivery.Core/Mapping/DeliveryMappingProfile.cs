@@ -33,11 +33,7 @@ namespace DeliveryService.Delivery.Core.Mapping
             .ForMember(dest => dest.ActualDeliveryTime, opt => opt.Ignore());
 
             CreateMap<Domain.Entities.DeliveryEntities.Delivery, CreateDeliveryResponse>();
-            CreateMap<CreateDeliveryRequest, CreateDeliveryDto>();
-            //CreateMap<DeliveryModel, DeliveryDto>();
-            //CreateMap<CreateDeliveryModel, CreateDeliveryDto>();
-            //CreateMap<DataAccess.Domain.Domain.Entities.Delivery, CreateDeliveryDto>();
-            //CreateMap<UpdateDeliveryModel, updateDeliveryDto>();
+            CreateMap<CreateDeliveryRequest, CreateDeliveryDto>();            
         }
     }
 }
