@@ -16,6 +16,8 @@ public abstract class ConsumerBackgroundService<TKey, TValue> : BackgroundServic
 {
     private ILogger _logger;
     private BaseConsumer<TKey, TValue> _baseConsumer;
+    private ApplicationOptions _applicationOptions;
+
     protected abstract string TopicName { get; }
     private readonly IOrderRepository _orderRepository;
     private readonly IDeliveryRepository _deliveryRepository;
@@ -34,6 +36,12 @@ public abstract class ConsumerBackgroundService<TKey, TValue> : BackgroundServic
         _baseConsumer = new BaseConsumer<TKey, TValue>(applicationOptions.KafkaOptions, logger, applicationOptions.GroupId);
         _logger = logger;
 
+    }
+
+    protected ConsumerBackgroundService(ILogger<NewOrderConsumer> logger, ApplicationOptions applicationOptions)
+    {
+        _logger = logger;
+        _applicationOptions = applicationOptions;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
