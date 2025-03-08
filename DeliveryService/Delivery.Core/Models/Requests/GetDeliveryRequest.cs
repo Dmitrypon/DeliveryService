@@ -1,9 +1,11 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
 using DeliveryService.Delivery.BusinessLogic.Enums;
-using DeliveryService.Delivery.Domain.Entities.DeliveryEntities;
 
 namespace DeliveryService.Delivery.Core.Models.Requests
 {
-    public class CreateDeliveryRequest
+    public class GetDeliveryRequest
     {
         public Guid Id { get; set; }
         public required Guid UserGuid { get; set; }
@@ -13,7 +15,7 @@ namespace DeliveryService.Delivery.Core.Models.Requests
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
         public PaymentType PaymentType { get; set; }
-        public required string ShippingAddress { get; set; }       
-        public DateTime EstimatedDeliveryTime { get; set; }       
+        public required string ShippingAddress { get; set; }
+        public DateTime EstimatedDeliveryTime { get; set; }
     }
 }
