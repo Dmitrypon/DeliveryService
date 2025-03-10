@@ -9,6 +9,7 @@ using DeliveryService.Delivery.Domain.Entities.DeliveryEntities;
 using DeliveryService.Delivery.Domain.Entities.External.Entities;
 using DeliveryService.Domain.External.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
 {
@@ -18,22 +19,24 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
         //private readonly OrderContext _context;
         private readonly IDeliveryRepository _deliveryRepository;
         private readonly IMapper _mapper;
+        private readonly IDistributedCache _cache;
 
-        public DeliveryServices(DeliveryDBContext context, IDeliveryRepository deliveryRepository, IMapper mapper)
+        public DeliveryServices(DeliveryDBContext context, IDeliveryRepository deliveryRepository, IMapper mapper, IDistributedCache cache)
         {
             _deliveryRepository = deliveryRepository;
             _mapper = mapper;
             _context = context;
+            _cache = cache;
         }
 
         /// <summary>
         /// Получить доставку по id.
         /// </summary>
         /// <param name="id"> Идентификатор доставки. </param>
-        /// <returns> DTO доставки.</returns>
+        /// <returns> Dto доставки </returns>
         public async Task<Domain.Entities.DeliveryEntities.Delivery> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var delivery = await _deliveryRepository.GetAsync(id, CancellationToken.None);            
+            var delivery = await _deliveryRepository.GetAsync(id, CancellationToken.None);
 
             return delivery;
         }

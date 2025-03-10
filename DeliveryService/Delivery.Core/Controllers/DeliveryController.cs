@@ -5,6 +5,7 @@ using DeliveryService.Delivery.BusinessLogic.Models;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Abstractions;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Contracts.Dto;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories;
+using DeliveryService.Delivery.Core.Cache;
 using DeliveryService.Delivery.Core.Models.Requests;
 using DeliveryService.Delivery.Core.Models.Responses;
 using DeliveryService.Delivery.DataAccess.Data;
@@ -17,28 +18,27 @@ namespace DeliveryService.Delivery.Core.Controllers
     [Route("api/v3/[controller]")]
     public class DeliveryController(IDeliveryService _deliveryService,
                                     IMapper _mapper,
-                                    ILogger<DeliveryController> _logger) : ControllerBase
+                                    IDistributedCache _distributedCache) : ControllerBase
     {
         /// <summary>
         /// Получение доставки через Guid
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
-        /// 
+        /// <returns></returns>         
         [HttpGet("/api/delivery/{id}")]
         public async Task<ActionResult<GetDeliveryResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            //string? serialized = await _distributedCache.GetStringAsync(KeyForCache.DeliveryKey(id), HttpContext.RequestAborted);
+            string? serialized = await _distributedCache.GetStringAsync(CacheKeys.DeliveryKey(id), HttpContext.RequestAborted);
 
-            //if (serialized is not null)
-            //{
-            //    var cachResult = JsonSerializer.Deserialize<IEnumerable<GetDeliveryResponse>>(serialized);
+            if (serialized is not null)
+            {
+                var cachResult = JsonSerializer.Deserialize<IEnumerable<GetDeliveryResponse>>(serialized);
 
-            //    if (cachResult is not null)
-            //    {
-            //        return Ok(cachResult);
-            //    }
-            //}
+                if (cachResult is not null)
+                {
+                    return Ok(cachResult);
+                }
+            }
             var delivery = _mapper.Map<GetDeliveryResponse>(await _deliveryService.GetByIdAsync(id, cancellationToken));
             return Ok(delivery);
 
