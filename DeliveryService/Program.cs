@@ -38,11 +38,11 @@ builder.Services.AddControllers();
 
 
 
-builder.Services.AddApplicationDataContext(builder.Configuration);
+//builder.Services.AddApplicationDataContext(builder.Configuration);
 
 //was deleted
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
 builder.Services.AddDbContext<DeliveryDBContext>(options =>

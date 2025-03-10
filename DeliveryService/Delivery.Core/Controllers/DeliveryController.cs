@@ -17,32 +17,31 @@ namespace DeliveryService.Delivery.Core.Controllers
     [ApiController]
     [Route("api/v3/[controller]")]
     public class DeliveryController(IDeliveryService _deliveryService,
-                                    IMapper _mapper,
-                                    IDistributedCache _distributedCache) : ControllerBase
+                                    IMapper _mapper/*,
+                                    IDistributedCache _distributedCache*/) : ControllerBase
     {
         /// <summary>
         /// Получение доставки через Guid
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>         
-        [HttpGet("/api/delivery/{id}")]
-        public async Task<ActionResult<GetDeliveryResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        {
-            string? serialized = await _distributedCache.GetStringAsync(CacheKeys.DeliveryKey(id), HttpContext.RequestAborted);
+        //[HttpGet("/api/delivery/{id}")]
+        //public async Task<ActionResult<GetDeliveryResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        //{
+        //    string? serialized = await _distributedCache.GetStringAsync(CacheKeys.DeliveryKey(id), HttpContext.RequestAborted);
 
-            if (serialized is not null)
-            {
-                var cachResult = JsonSerializer.Deserialize<IEnumerable<GetDeliveryResponse>>(serialized);
+        //    if (serialized is not null)
+        //    {
+        //        var cachResult = JsonSerializer.Deserialize<IEnumerable<GetDeliveryResponse>>(serialized);
 
-                if (cachResult is not null)
-                {
-                    return Ok(cachResult);
-                }
-            }
-            var delivery = _mapper.Map<GetDeliveryResponse>(await _deliveryService.GetByIdAsync(id, cancellationToken));
-            return Ok(delivery);
-
-        }
+        //        if (cachResult is not null)
+        //        {
+        //            return Ok(cachResult);
+        //        }
+        //    }
+        //    var delivery = _mapper.Map<GetDeliveryResponse>(await _deliveryService.GetByIdAsync(id, cancellationToken));
+        //    return Ok(delivery);
+        //}
         /// <summary>
         /// Создание доставки
         /// </summary>

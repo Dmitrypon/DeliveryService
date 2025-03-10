@@ -18,15 +18,13 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
         private readonly DeliveryDBContext _context;
         //private readonly OrderContext _context;
         private readonly IDeliveryRepository _deliveryRepository;
-        private readonly IMapper _mapper;
-        private readonly IDistributedCache _cache;
+        private readonly IMapper _mapper;        
 
-        public DeliveryServices(DeliveryDBContext context, IDeliveryRepository deliveryRepository, IMapper mapper, IDistributedCache cache)
+        public DeliveryServices(DeliveryDBContext context, IDeliveryRepository deliveryRepository, IMapper mapper)
         {
             _deliveryRepository = deliveryRepository;
             _mapper = mapper;
-            _context = context;
-            _cache = cache;
+            _context = context;          
         }
 
         /// <summary>
@@ -48,7 +46,6 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
             return delivery;
 
         }
-
 
         /// <summary>
         /// Создать доставку.

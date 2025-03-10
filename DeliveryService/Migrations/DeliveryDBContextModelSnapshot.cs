@@ -3,7 +3,6 @@ using System;
 using DeliveryService.Delivery.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,11 +11,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeliveryService.Migrations
 {
     [DbContext(typeof(DeliveryDBContext))]
-    [Migration("20250215073059_Second")]
-    partial class Second
+    partial class DeliveryDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,23 +22,7 @@ namespace DeliveryService.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.Domain.Entities.Courier", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Couriers");
-                });
-
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.Domain.Entities.Delivery", b =>
+            modelBuilder.Entity("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,9 +30,6 @@ namespace DeliveryService.Migrations
 
                     b.Property<DateTime?>("ActualDeliveryTime")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CourierId")
-                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreateTimestamp")
                         .HasColumnType("timestamp with time zone");
@@ -64,6 +42,9 @@ namespace DeliveryService.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
@@ -78,18 +59,16 @@ namespace DeliveryService.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("TimeModified")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
 
                     b.Property<int>("TotalQuantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("UserGuid")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("CourierId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
@@ -97,11 +76,38 @@ namespace DeliveryService.Migrations
                     b.ToTable("Deliveries");
                 });
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.External.Entities.Order", b =>
+            modelBuilder.Entity("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.DeliveryHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("DeliveryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("DeliveryStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliveryId");
+
+                    b.ToTable("DeliveryHistory");
+                });
+
+            modelBuilder.Entity("DeliveryService.Domain.External.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("ChangedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedTimestamp")
                         .HasColumnType("timestamp with time zone");
@@ -128,7 +134,7 @@ namespace DeliveryService.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.External.Entities.OrderItem", b =>
+            modelBuilder.Entity("DeliveryService.Domain.External.Entities.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -147,40 +153,43 @@ namespace DeliveryService.Migrations
                     b.ToTable("OrderItem");
                 });
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.Domain.Entities.Delivery", b =>
+            modelBuilder.Entity("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery", b =>
                 {
-                    b.HasOne("DeliveryService.Delivery.DataAccess.Domain.Domain.Entities.Courier", "Courier")
-                        .WithMany("Deliveries")
-                        .HasForeignKey("CourierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeliveryService.Delivery.DataAccess.Domain.External.Entities.Order", "Order")
+                    b.HasOne("DeliveryService.Domain.External.Entities.Order", "Order")
                         .WithOne("Delivery")
-                        .HasForeignKey("DeliveryService.Delivery.DataAccess.Domain.Domain.Entities.Delivery", "OrderId")
+                        .HasForeignKey("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery", "OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Courier");
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.External.Entities.OrderItem", b =>
+            modelBuilder.Entity("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.DeliveryHistory", b =>
                 {
-                    b.HasOne("DeliveryService.Delivery.DataAccess.Domain.External.Entities.Order", "Order")
+                    b.HasOne("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery", "Delivery")
+                        .WithMany("History")
+                        .HasForeignKey("DeliveryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Delivery");
+                });
+
+            modelBuilder.Entity("DeliveryService.Domain.External.Entities.OrderItem", b =>
+                {
+                    b.HasOne("DeliveryService.Domain.External.Entities.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.Domain.Entities.Courier", b =>
+            modelBuilder.Entity("DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery", b =>
                 {
-                    b.Navigation("Deliveries");
+                    b.Navigation("History");
                 });
 
-            modelBuilder.Entity("DeliveryService.Delivery.DataAccess.Domain.External.Entities.Order", b =>
+            modelBuilder.Entity("DeliveryService.Domain.External.Entities.Order", b =>
                 {
                     b.Navigation("Delivery");
 
