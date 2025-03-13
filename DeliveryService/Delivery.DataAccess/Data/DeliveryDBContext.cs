@@ -1,6 +1,7 @@
 using DeliveryService.Domain.External.Entities;
 using Microsoft.EntityFrameworkCore;
 using DeliveryService.Delivery.Domain.Entities.DeliveryEntities;
+using Confluent.Kafka;
 
 namespace DeliveryService.Delivery.DataAccess.Data
 {
@@ -28,9 +29,11 @@ namespace DeliveryService.Delivery.DataAccess.Data
             modelBuilder.Entity<DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery>()
                 .HasOne(d => d.Order)
                 .WithOne(o => o.Delivery)
-                .HasForeignKey<DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery>(d => d.OrderId)
-                .OnDelete(DeleteBehavior.Restrict);
-            
+                .HasForeignKey<DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery>(d => d.OrderId)               
+                .OnDelete(DeleteBehavior.Restrict);     //Cascade — зависимые сущности должны быть удалены. 
+                                                        //Restrict — зависимые сущности не затрагиваются. 
+                                                        //SetNull — значения внешних ключей в зависимых строках должны обновляться до значения NULL.
+
             modelBuilder.Entity<Order>().Property(c => c.ShippingAddress).HasMaxLength(200);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
