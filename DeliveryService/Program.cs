@@ -21,7 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 //builder.Services.AddDbContext<OrderContext>(opt =>
-//        opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")),
+//        opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
 //    ServiceLifetime.Singleton
 //);
 
@@ -37,12 +37,10 @@ builder.Services.AddControllers();
 //});
 
 
-
 //builder.Services.AddApplicationDataContext(builder.Configuration);
 
-//was deleted
 
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");   //testing for
 
 
 builder.Services.AddDbContext<DeliveryDBContext>(options =>

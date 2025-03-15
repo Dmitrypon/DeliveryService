@@ -9,6 +9,7 @@ namespace DeliveryService.Delivery.DataAccess.Data
         {
             var scope = host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
+            
             context.Database.Migrate();
         }
     }

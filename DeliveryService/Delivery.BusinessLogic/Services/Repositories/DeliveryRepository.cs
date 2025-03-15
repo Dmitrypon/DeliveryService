@@ -53,7 +53,6 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         public async Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken = default)
             => await _entityDeliverySet.FindAsync(id, cancellationToken);
 
-
         /// <summary>
         /// Запросить все сущности в базе.
         /// </summary>
@@ -73,7 +72,11 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         public async Task<Domain.Entities.DeliveryEntities.Delivery> AddAsync(Domain.Entities.DeliveryEntities.Delivery delivery, CancellationToken cancellationToken)
         {
             await _context.Deliveries.AddAsync(delivery);
-            await _context.SaveChangesAsync();
+            
+            
+            
+            
+            await _context.SaveChangesAsync(cancellationToken);
             return delivery;
         }
             /// <summary>
@@ -103,9 +106,9 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
                   deliveryToUpdate.PaymentType == delivery.PaymentType &&
                   deliveryToUpdate.DeliveryStatus == delivery.DeliveryStatus &&                                              
                   deliveryToUpdate.ShippingAddress == delivery.ShippingAddress &&
-                  deliveryToUpdate.TotalQuantity == delivery.TotalQuantity &&                   // ?is required
-                  deliveryToUpdate.TotalPrice == delivery.TotalPrice &&                         // ?is required
-                  deliveryToUpdate.EstimatedDeliveryTime == delivery.EstimatedDeliveryTime    // ?is required
+                  deliveryToUpdate.TotalQuantity == delivery.TotalQuantity &&                   
+                  deliveryToUpdate.TotalPrice == delivery.TotalPrice &&                         
+                  deliveryToUpdate.EstimatedDeliveryTime == delivery.EstimatedDeliveryTime    
                )                
 
             if (delivery.ShippingAddress is not null)
