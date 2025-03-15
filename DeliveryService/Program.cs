@@ -54,6 +54,7 @@ builder.Services.AddScoped<IDeliveryService, DeliveryServices>();
 //builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 //builder.Services.AddHostedService<OrderConsumerService>();
 
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
