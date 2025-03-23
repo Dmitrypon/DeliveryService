@@ -36,7 +36,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
             return _entityDeliverySet.Find(userId);
         }
         /// <summary>
-        /// Получить сущность по Id.
+        /// Получить сущность доставки по Id заказа.
         /// </summary>
         /// <param name="orderId"> Id сущности. </param>        
         /// <returns> Cущность. </returns>
@@ -71,10 +71,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         /// <returns> Добавленная сущность. </returns>
         public async Task<Domain.Entities.DeliveryEntities.Delivery> AddAsync(Domain.Entities.DeliveryEntities.Delivery delivery, CancellationToken cancellationToken)
         {
-            await _context.Deliveries.AddAsync(delivery);
-            
-            
-            
+            await _context.Deliveries.AddAsync(delivery); 
             
             await _context.SaveChangesAsync(cancellationToken);
             return delivery;

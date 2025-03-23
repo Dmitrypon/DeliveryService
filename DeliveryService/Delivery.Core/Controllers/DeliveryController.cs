@@ -73,7 +73,7 @@ namespace DeliveryService.Delivery.Core.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("/api/delete-delivery/{id}")]
-        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             bool isDeleted = await _deliveryService.TryDeleteAsync(id, cancellationToken);
             return isDeleted ? Ok(id) : NotFound();
@@ -85,27 +85,15 @@ namespace DeliveryService.Delivery.Core.Controllers
         /// <param name="orderId"></param>
         /// <returns></returns>
         [HttpGet("/api/GetDeliveryStatus/{orderId}")]
-        public async Task<IActionResult> GetDeliveryStatus(Guid orderId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetDeliveryStatus(Guid orderId, CancellationToken cancellationToken)
         {
             var delivery = await _deliveryService.GetByIdAsync(orderId, cancellationToken);
             if (delivery != null)
                 return Ok(JsonSerializer.Serialize(delivery));
 
             return NotFound();
-        }
-        /// <summary>
-        /// Получение статуса доставки через id заказа 
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// 
-        //[HttpGet("/api/getDeliveryStatusByOrderId/{orderId}")]
-        //public async Task<IActionResult> GetDeliveryStatusByOrderId(Guid orderId, CancellationToken cancellationToken)
-        //{
-        //    var delivery = await _deliveryService.GetDeliveryByOrderIdAsync(orderId, cancellationToken);
-        //    if (orderId != null)
-        //        return Ok(JsonSerializer.Serialize(delivery));
-        //}
+        }       
     }
 }
+
 

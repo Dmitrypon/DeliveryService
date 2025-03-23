@@ -14,13 +14,12 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Abstractions
         /// <returns> Dto доставки.</returns>
         Task<Domain.Entities.DeliveryEntities.Delivery> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-
         /// <summary>   
-        /// Получить доставку по id.
+        /// Получить сущность доставки по Id заказа.
         /// </summary>
         /// <param name="orderId"> Идентификатор доставки. </param>
         /// <returns> Dto доставки.</returns>
-        Task<Domain.Entities.DeliveryEntities.Delivery> GetDeliveryByOrderIdAsync(Guid orderId, CancellationToken cancellationToken);
+        Task<Domain.Entities.DeliveryEntities.Delivery> GetDeliveryByOrderIdAsync(Guid orderId, CancellationToken cancellationToken);     
 
         /// <summary>
         /// Создать доставку.

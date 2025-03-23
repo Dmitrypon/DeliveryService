@@ -6,8 +6,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Contracts.Dto
     {
         public Guid Id { get; set; }
         public required Guid UserGuid { get; set; }
-        public Guid OrderId { get; set; }       
-        public Guid? CourierId { get; set; }
+        public Guid OrderId { get; set; }        
         public DeliveryStatus DeliveryStatus { get; set; }
         public PaymentType PaymentType { get; set; }
         public required int TotalQuantity { get; set; }

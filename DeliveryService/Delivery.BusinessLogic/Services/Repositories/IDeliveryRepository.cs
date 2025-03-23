@@ -28,7 +28,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить сущность по Id.
+        /// Получить сущность доставки по Id заказа.
         /// </summary>
         /// <param name="orderId"> Id сущности. </param>
         /// <param name="cancellationToken"></param>

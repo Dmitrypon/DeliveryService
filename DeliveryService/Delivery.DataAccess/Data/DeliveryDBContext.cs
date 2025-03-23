@@ -13,12 +13,12 @@ namespace DeliveryService.Delivery.DataAccess.Data
         /// <summary>
         /// Deliveries
         /// </summary>
-        public DbSet<DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery> Deliveries { get; set; }
+        public DbSet<DeliveryService.Delivery.Domain.Entities.DeliveryEntities.Delivery> Deliveries { get; set; } = null!;
          
         /// <summary>
         /// Orders
         /// </summary>
-        public DbSet<Order> Orders { get; } 
+        public DbSet<Order> Orders { get; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
