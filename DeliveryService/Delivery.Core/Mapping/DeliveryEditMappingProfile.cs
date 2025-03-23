@@ -28,7 +28,7 @@ namespace DeliveryService.Delivery.Core.Mapping
             CreateMap<EditDeliveryRequest, UpdateDeliveryDto>()
            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-            CreateMap<EditDeliveryRequest, UpdateDeliveryDto>();
+            CreateMap<EditDeliveryRequest, EditDeliveryResponse>();
         }
     }
 }

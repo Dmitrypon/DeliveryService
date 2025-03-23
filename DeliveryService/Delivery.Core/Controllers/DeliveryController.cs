@@ -16,10 +16,11 @@ namespace DeliveryService.Delivery.Core.Controllers
 {
     [ApiController]
     [Route("api/v3/[controller]")]
-    public class DeliveryController(IDeliveryService _deliveryService,
+    public class DeliveryController(IDeliveryService _deliveryService,                                   
                                     IMapper _mapper,
                                     IDistributedCache _distributedCache) : ControllerBase
-    {
+    {       
+
         /// <summary>
         /// Получение доставки через Guid
         /// </summary>
@@ -79,7 +80,7 @@ namespace DeliveryService.Delivery.Core.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("/api/delete-delivery/{id}")]
-        public async Task<ActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             bool isDeleted = await _deliveryService.TryDeleteAsync(id, cancellationToken);
             return isDeleted ? Ok(id) : NotFound();

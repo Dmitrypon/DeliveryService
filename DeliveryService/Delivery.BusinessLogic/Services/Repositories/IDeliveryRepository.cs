@@ -25,7 +25,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         /// <param name="id"> Id сущности. </param>
         /// <param name="cancellationToken"></param>
         /// <returns> Cущность. </returns>
-        Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken);
+        Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken, string v);
 
         /// <summary>
         /// Получить сущность доставки по Id заказа.
@@ -66,7 +66,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         /// </summary>
         /// <param name="entity"> Cущность для удаления. </param>
         /// <returns> Была ли сущность удалена. </returns>
-        bool Delete(Domain.Entities.DeliveryEntities.Delivery entity);
+       bool Delete(Domain.Entities.DeliveryEntities.Delivery entity);
         /// <summary>
         /// Удалить сущность.
         /// </summary>
@@ -80,7 +80,8 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         /// <summary>
         /// Сохранить изменения.
         /// </summary>
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);        
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken none);
     }
 
 }

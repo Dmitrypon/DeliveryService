@@ -21,7 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 //builder.Services.AddDbContext<OrderContext>(opt =>
-//        opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
+//        opt.UseNpgsql(builder.Configuration.GetConnectionString("OrderDefaultConnection")),
 //    ServiceLifetime.Singleton
 //);
 
@@ -35,13 +35,6 @@ builder.Services.AddControllers();
 //    };
 //    return new ConsumerBuilder<Null, string>(config).Build();
 //});
-
-
-//builder.Services.AddApplicationDataContext(builder.Configuration);
-
-
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");   //testing for
-
 
 builder.Services.AddDbContext<DeliveryDBContext>(options =>
 {

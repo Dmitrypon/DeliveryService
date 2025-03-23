@@ -1,5 +1,6 @@
 using System;
 using DeliveryService.Delivery.BusinessLogic.Services.Delivery.Contracts.Dto;
+using DeliveryService.Delivery.Domain.Entities.Abstractions;
 using DeliveryService.Domain.External.Entities;
 
 

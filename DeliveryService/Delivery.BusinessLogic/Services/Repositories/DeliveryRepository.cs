@@ -26,17 +26,27 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         {
             return _entityDeliverySet.Find(id);
         }
-            /// <summary>
-            /// Получить сущность по Id.
-            /// </summary>
-            /// <param name="userId"> Id сущности. </param>        
-            /// <returns> Cущность. </returns>
+
+        /// <summary>
+        /// Получить сущность по Id.
+        /// </summary>
+        /// <param name="id"> Id сущности. </param>
+        /// <param name="cancellationToken"></param>
+        /// <returns> Cущность. </returns>
+        public async Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken = default)
+            => await _entityDeliverySet.FindAsync(id, cancellationToken);
+
+        /// <summary>
+        /// Получить сущность по Id.
+        /// </summary>
+        /// <param name="userId"> Id сущности. </param>        
+        /// <returns> Cущность. </returns>
         public Domain.Entities.DeliveryEntities.Delivery GetUserId(Guid userId, CancellationToken cancellationToken)
         {
             return _entityDeliverySet.Find(userId);
         }
         /// <summary>
-        /// Получить сущность доставки по Id заказа.
+        /// Получить сущность по Id.
         /// </summary>
         /// <param name="orderId"> Id сущности. </param>        
         /// <returns> Cущность. </returns>
@@ -50,7 +60,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         /// <param name="id"> Id сущности. </param>
         /// <param name="cancellationToken"></param>
         /// <returns> Cущность. </returns>
-        public async Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Domain.Entities.DeliveryEntities.Delivery> GetAsync(Guid id, CancellationToken cancellationToken = default, string v = null)
             => await _entityDeliverySet.FindAsync(id, cancellationToken);
 
         /// <summary>
@@ -71,7 +81,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
         /// <returns> Добавленная сущность. </returns>
         public async Task<Domain.Entities.DeliveryEntities.Delivery> AddAsync(Domain.Entities.DeliveryEntities.Delivery delivery, CancellationToken cancellationToken)
         {
-            await _context.Deliveries.AddAsync(delivery); 
+            await _context.Deliveries.AddAsync(delivery);   
             
             await _context.SaveChangesAsync(cancellationToken);
             return delivery;
@@ -125,14 +135,14 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.Delivery.Repositories
             /// </summary>
             /// <param name="entity"> Cущность для удаления. </param>
             /// <returns> Была ли сущность удалена. </returns>
-        public bool Delete(Domain.Entities.DeliveryEntities.Delivery product)
+        public bool Delete(Domain.Entities.DeliveryEntities.Delivery delivery)
         {
-            if (product is null)
+            if (delivery is null)
             {
                 return false;
             }
-            _entityDeliverySet.Remove(product);
-            _entityDeliverySet.Entry(product).State = EntityState.Deleted;
+            _entityDeliverySet.Remove(delivery);
+            _entityDeliverySet.Entry(delivery).State = EntityState.Deleted;
 
             return true;
         }           

@@ -152,7 +152,7 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
                 DeliveryId = delivery.Id,
                 DeliveryStatus = delivery.DeliveryStatus,
                 Timestamp = DateTime.Now,
-                Comments = "Status updated based on Order status / Статус обновляется в зависимости от статуса заказа"
+                Comments = "Status updated based on Order status / Статус обновляется в зависимости от статуса заказа)."
             };
             delivery.History?.Add(deliveryHistory);
 
