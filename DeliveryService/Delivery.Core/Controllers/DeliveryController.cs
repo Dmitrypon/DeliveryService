@@ -26,6 +26,8 @@ namespace DeliveryService.Delivery.Core.Controllers
         /// <param name="id"></param>
         /// <returns></returns>         
         [HttpGet("/api/delivery/{id}")]
+        [ProducesResponseType<GetDeliveryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetDeliveryResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             string? serialized = await _distributedCache.GetStringAsync(CacheKeys.DeliveryKey(id), HttpContext.RequestAborted);
@@ -49,6 +51,8 @@ namespace DeliveryService.Delivery.Core.Controllers
         /// <returns></returns>
 
         [HttpPost("/api/create-delivery")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CreateDeliveryResponse>> CreateAsync(CreateDeliveryRequest request, CancellationToken cancellationToken)
         {
             var delivery = await _deliveryService.CreateAsync(_mapper.Map<CreateDeliveryDto>(request), cancellationToken);
@@ -61,6 +65,8 @@ namespace DeliveryService.Delivery.Core.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut("/api/update-delivery/{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<EditDeliveryResponse>> UpdateAsync(Guid id, EditDeliveryRequest request, CancellationToken cancellationToken)
         {
             var delivery = await _deliveryService.UpdateAsync(id, _mapper.Map<EditDeliveryRequest, UpdateDeliveryDto>(request), cancellationToken);
@@ -80,11 +86,13 @@ namespace DeliveryService.Delivery.Core.Controllers
         }
 
         /// <summary>
-        /// Получение статуса доставки через Guid заказа
+        /// Получение статуса доставки по Guid заказа
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
         [HttpGet("/api/GetDeliveryStatus/{orderId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetDeliveryStatus(Guid orderId, CancellationToken cancellationToken)
         {
             var delivery = await _deliveryService.GetByIdAsync(orderId, cancellationToken);

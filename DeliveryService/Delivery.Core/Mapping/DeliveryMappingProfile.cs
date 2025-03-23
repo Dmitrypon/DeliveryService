@@ -35,11 +35,11 @@ namespace DeliveryService.Delivery.Core.Mapping
             .ForMember(dest => dest.PaymentType, opt => opt.MapFrom(src => src.PaymentType))
             .ForMember(dest => dest.ShippingAddress, opt => opt.MapFrom(src => src.ShippingAddress));
 
-            CreateMap<CreateDeliveryRequest, CreateDeliveryDto>();
+            CreateMap<DeliveryModel, DeliveryDto>();
+            CreateMap<CreateDeliveryRequest, CreateDeliveryDto>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.DeliveryStatus, opt => opt.Ignore());
             CreateMap<Domain.Entities.DeliveryEntities.Delivery, CreateDeliveryResponse>();
-            CreateMap<EditDeliveryRequest, UpdateDeliveryDto>();
-            CreateMap<UpdateDeliveryDto, Domain.Entities.DeliveryEntities.Delivery>();
-
         }
     }
 }

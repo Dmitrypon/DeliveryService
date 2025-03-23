@@ -30,7 +30,6 @@ namespace DeliveryService.Delivery.Domain.Entities.DeliveryEntities
         /// </summary>           
         public bool IsDeleted { get; set; }
         public DateTime LastUpdated { get; set; }
-
         public virtual List<DeliveryHistory>? History { get; set; }
     }
 }

@@ -13,8 +13,7 @@ namespace DeliveryService.Kafka.Messages
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
         public PaymentType PaymentType { get; set; }
-        public string ShippingAddress { get; set; } = null!;
-        public Guid CourierId { get; set; }
+        public string ShippingAddress { get; set; } = null!;       
         public required DateTime EstimatedDeliveryTime { get; set; }
         public DateTime CreateTimestamp { get; set; }
         public List<OrderItem>? Items { get; set; }

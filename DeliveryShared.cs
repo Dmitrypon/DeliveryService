@@ -6,16 +6,15 @@ public class Delivery : IEntity<Guid>
     /// <summary>
     /// Delivery basic parameters
     /// </summary>         
-    public DeliveryStatus DeliveryStatus { get; set; }
+    public Guid UserGuid { get; set; }
+    public DeliveryStatus DeliveryStatus { get; set; } = DeliveryStatus.AwaitingShipment;
     public Guid OrderId { get; set; }
-    public Guid CourierId { get; set; }
-    public OrderStatus OrderStatus { get; set; }
+    public OrderState OrderStatus { get; set; }
     public int TotalQuantity { get; set; }
     public decimal TotalPrice { get; set; }
     public PaymentType PaymentType { get; set; }
-    public required string ShippingAddress { get; set; }
-    public required Courier Courier { get; set; }
-    public required Order Order { get; set; }
+    public required string ShippingAddress { get; set; } = null!;
+    public Order? Order { get; set; }
     /// <summary>
     /// Delivery timing
     /// </summary>
@@ -26,6 +25,7 @@ public class Delivery : IEntity<Guid>
     /// Delivery modify status
     /// </summary>           
     public bool IsDeleted { get; set; }
-    public DateTime TimeModified { get; set; }
+    public DateTime LastUpdated { get; set; }
+    public virtual List<DeliveryHistory>? History { get; set; }
 }
 
