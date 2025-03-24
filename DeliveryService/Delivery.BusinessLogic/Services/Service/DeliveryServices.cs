@@ -172,6 +172,5 @@ namespace DeliveryService.Delivery.BusinessLogic.Services.DeliveryService
                 _ => DeliveryStatus.AwaitingShipment,
             };
         }
-
     }
 }
